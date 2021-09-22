@@ -1,0 +1,149 @@
+:root {
+  --crl-neutral-900: hsl(207, 19%, 9%);
+  --crl-neutral-100: hsl(0, 0%, 100%);
+  --crl-accent-400: hsl(142, 90%, 61%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  display: grid;
+  min-height: 90vh;
+  place-items: center;
+  line-height: 1.6;
+  background: var(--crl-neutral-900);
+  font-family: sans-serif;
+}
+
+.card {
+  color: var(--crl-neutral-100);
+  background-image: url(images/background.png);
+  background-size: cover;
+  padding: 11em 0 0;
+  /* 35ch: size of 35 characters */
+  max-width: 40ch;
+
+  /* overflow is used bec of the background of the card content */
+  border-radius: 0.5rem;
+  overflow: hidden;
+
+  transition: transform 500ms ease-in;
+}
+
+/* FOCUS-WITHTIN FOR THE CLICKING THE TAB BUTTON */
+
+.card:hover,
+.card:focus-within {
+  transform: scale(1.05);
+}
+
+.card-content {
+  /* --padding: is only can be accessed in the .card-content and its children */
+  /* "rem" must be not "em" because the font size is em not rem */
+  --padding: 1.5rem;
+  padding: var(--padding);
+
+  background: linear-gradient(
+    hsl(0 0% 0% / 0),
+    hsl(20 0% 0% / 0.3) 20%,
+    hsl(0 0% 0% / 1)
+  );
+}
+
+.card-body {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.card-title {
+  position: relative;
+  width: max-content;
+}
+
+.card-title::after {
+  content: "";
+  position: absolute;
+  background: var(--crl-accent-400);
+  height: 4px;
+
+  /* IMPORTANT TRICK */
+  /* the title has padding 1.5, so the line must have the same value behind it, by doing: padding * -1  */
+  left: calc(var(--padding) * -1);
+  width: calc(var(--padding) + 100%);
+  bottom: 0;
+
+  transform-origin: left;
+  transition: transform 500ms ease;
+}
+
+.card:hover .card-title::after,
+.card:focus-within .card-title::after {
+  transform: scaleX(1);
+}
+
+.button {
+  cursor: pointer;
+  display: inline;
+  text-decoration: none;
+  color: var(--crl-neutral-900);
+  background: var(--crl-accent-400);
+  padding: 0.5em 1.25em;
+  border-radius: 0.25rem;
+}
+
+.button:hover,
+.button:focus {
+  background-color: var(--crl-neutral-100);
+}
+
+@media (hover) {
+  .card-content {
+    transform: translateY(65%);
+    transition: transform 500ms ease;
+  }
+
+  .card:hover .card-content,
+  .card:focus-within .card-content {
+    transform: translateY(0);
+    transition-delay: 500ms;
+  }
+
+  .card:focus-within .card-content {
+    transition-delay: 0ms;
+  }
+
+  .card-content > *:not(.card-title) {
+    opacity: 0;
+    transition: opacity 500ms linear;
+  }
+
+  .card:hover .card-content > *:not(.card-title) {
+    opacity: 1;
+    transition-delay: 800ms;
+  }
+
+  .card:focus-within .card-content > *:not(.card-title) {
+    opacity: 1;
+    transition-delay: 0ms;
+  }
+
+  .card-title::after {
+    transform: scaleX(0);
+  }
+}
+
+/* To reduce the animation in case the user closed the animation behavior from his own windows/mac */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition-delay: 0ms !important;
+  }
+}
